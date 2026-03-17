@@ -1,5 +1,9 @@
 # 🌊 Robot Autónomo de Limpieza de Playas
 
+<p align="center">
+  <img src="assets/robot.gif" width="600"/>
+</p>
+
 Sistema robótico autónomo diseñado para la limpieza eficiente de playas mediante navegación inteligente, percepción con sensores y algoritmos de aprendizaje por refuerzo.
 
 ---
