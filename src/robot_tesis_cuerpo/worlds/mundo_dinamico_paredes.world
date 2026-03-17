@@ -1,0 +1,328 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="default">
+
+    <!-- ─────────── ESCENA: iluminación & desactivar sombras ─────────── -->
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>false</shadows>
+    </scene>
+
+    <!-- ─────────── PLUGINS ROS–GAZEBO ─────────── -->
+    <plugin name="gazebo_ros_api_plugin" filename="libgazebo_ros_api_plugin.so"/>
+    <plugin name="gazebo_ros_factory"  filename="libgazebo_ros_factory.so"/>
+    <plugin name="gazebo_ros_state"    filename="libgazebo_ros_state.so"/>
+
+    <!-- ─────────── SOL y SUELO ─────────── -->
+    <include><uri>model://sun</uri></include>
+    <include><uri>model://ground_plane</uri></include>
+
+    <!-- ─────────── PAREDES 30x30 ─────────── -->
+    <!-- Izquierda -->
+    <model name="wall_left">
+      <static>true</static>
+      <pose>-15 0 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>0.2 30 2</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.2 30 2</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Derecha -->
+    <model name="wall_right">
+      <static>true</static>
+      <pose>15 0 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>0.2 30 2</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.2 30 2</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Inferior -->
+    <model name="wall_bottom">
+      <static>true</static>
+      <pose>0 -15 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>30 0.2 2</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>30 0.2 2</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Superior -->
+    <model name="wall_top">
+      <static>true</static>
+      <pose>0 15 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>30 0.2 2</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>30 0.2 2</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    <!-- 📦 CAJAS DINÁMICAS SIMPLES (SIN PLUGINS - MOVIDAS POR EL ENTORNO PYTHON)      -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- 🔄 CAJA 00: Movimiento horizontal (roja) -->
+    <model name="box_00">
+      <pose>0 0 0.5 0 0 0</pose>
+      <static>false</static>
+      
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient>  <!-- Rojo -->
+            <diffuse>0.8 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+        
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- 🔄 CAJA 01: Movimiento vertical (verde) -->
+    <model name="box_01">
+      <pose>6 6 0.5 0 0 0</pose>
+      <static>false</static>
+      
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.8 0.2 1</ambient>  <!-- Verde -->
+            <diffuse>0.2 0.8 0.2 1</diffuse>
+          </material>
+        </visual>
+        
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- 🔄 CAJA 02: Movimiento diagonal (azul) -->
+    <model name="box_02">
+      <pose>-6 6 0.5 0 0 0</pose>
+      <static>false</static>
+      
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.2 0.8 1</ambient>  <!-- Azul -->
+            <diffuse>0.2 0.2 0.8 1</diffuse>
+          </material>
+        </visual>
+        
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- 🔄 CAJA 03: Movimiento circular (amarillo) -->
+    <model name="box_03">
+      <pose>-6 -6 0.5 0 0 0</pose>
+      <static>false</static>
+      
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.2 1</ambient>  <!-- Amarillo -->
+            <diffuse>0.8 0.8 0.2 1</diffuse>
+          </material>
+        </visual>
+        
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- 🔄 CAJA 04: Segundo movimiento horizontal (magenta) -->
+    <model name="box_04">
+      <pose>6 -6 0.5 0 0 0</pose>
+      <static>false</static>
+      
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.8 1</ambient>  <!-- Magenta -->
+            <diffuse>0.8 0.2 0.8 1</diffuse>
+          </material>
+        </visual>
+        
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- 🔄 CAJA 05: Segundo movimiento vertical (cian) -->
+    <model name="box_05">
+      <pose>0 -8 0.5 0 0 0</pose>
+      <static>false</static>
+      
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.8 0.8 1</ambient>  <!-- Cian -->
+            <diffuse>0.2 0.8 0.8 1</diffuse>
+          </material>
+        </visual>
+        
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- ─────────── FÍSICA ─────────── -->
+    <physics name="default_physics" type="ode">
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.004</max_step_size>
+      <use_real_time>false</use_real_time>
+      <ode>
+        <solver><type>quick</type><iters>40</iters><sor>1.3</sor></solver>
+        <constraints><cfm>1e-5</cfm><erp>0.3</erp></constraints>
+      </ode>
+    </physics>
+
+    <!-- ─────────── GUI ─────────── -->
+    <gui fullscreen="0">
+      <camera name="user_camera">
+        <pose>0 -25 20 0 0.6 1.57</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+
+  </world>
+</sdf>

@@ -1,0 +1,535 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="default">
+
+    <!-- ─────────── ESCENA: iluminación & sombras activadas para realismo ─────────── -->
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>  <!-- Activamos sombras para ver mejor las irregularidades -->
+    </scene>
+
+    <!-- ─────────── PLUGINS ROS–GAZEBO ─────────── -->
+    <plugin name="gazebo_ros_api_plugin" filename="libgazebo_ros_api_plugin.so"/>
+    <plugin name="gazebo_ros_factory"  filename="libgazebo_ros_factory.so"/>
+    <plugin name="gazebo_ros_state"    filename="libgazebo_ros_state.so"/>
+
+    <!-- ─────────── SOL ─────────── -->
+    <include><uri>model://sun</uri></include>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    <!-- 🌍 TERRENO BASE CON IMPERFECCIONES                                              -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    
+    <!-- Base del terreno principal -->
+    <model name="ground_base">
+      <static>true</static>
+      <pose>0 0 -0.01 0 0 0</pose>  <!-- Ligeramente bajo para que las imperfecciones sobresalgan -->
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>50 50 0.02</size></box>  <!-- Base grande y delgada -->
+          </geometry>
+          <surface>
+            <friction>
+              <ode><mu>0.8</mu><mu2>0.8</mu2></ode>  <!-- Fricción realista -->
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>50 50 0.02</size></box>
+          </geometry>
+          <material>
+            <ambient>0.6 0.5 0.4 1</ambient>  <!-- Color tierra -->
+            <diffuse>0.6 0.5 0.4 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    <!-- 🗻 IMPERFECCIONES DEL TERRENO - MONTÍCULOS Y DEPRESIONES                       -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Montículo 1: Pequeña elevación -->
+    <model name="bump_01">
+      <static>true</static>
+      <pose>3 2 0.05 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder><radius>1.5</radius><length>0.1</length></cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder><radius>1.5</radius><length>0.1</length></cylinder>
+          </geometry>
+          <material>
+            <ambient>0.5 0.4 0.3 1</ambient>
+            <diffuse>0.5 0.4 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Montículo 2: Elevación más pronunciada -->
+    <model name="bump_02">
+      <static>true</static>
+      <pose>-5 4 0.08 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder><radius>2.0</radius><length>0.16</length></cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder><radius>2.0</radius><length>0.16</length></cylinder>
+          </geometry>
+          <material>
+            <ambient>0.45 0.35 0.25 1</ambient>
+            <diffuse>0.45 0.35 0.25 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Depresión 1: Pequeño hoyo -->
+    <model name="depression_01">
+      <static>true</static>
+      <pose>-2 -3 -0.03 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <cylinder><radius>1.2</radius><length>0.06</length></cylinder>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <cylinder><radius>1.2</radius><length>0.06</length></cylinder>
+          </geometry>
+          <material>
+            <ambient>0.3 0.25 0.2 1</ambient>  <!-- Más oscuro para simular depresión -->
+            <diffuse>0.3 0.25 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Montículo irregular 3 -->
+    <model name="bump_03">
+      <static>true</static>
+      <pose>6 -2 0.06 0 0.1 0.3</pose>  <!-- Ligeramente inclinado -->
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>3 2 0.12</size></box>  <!-- Forma rectangular irregular -->
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>3 2 0.12</size></box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.45 0.35 1</ambient>
+            <diffuse>0.55 0.45 0.35 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Pequeñas rocas esparcidas -->
+    <model name="rock_01">
+      <static>true</static>
+      <pose>1 -6 0.02 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <sphere><radius>0.15</radius></sphere>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <sphere><radius>0.15</radius></sphere>
+          </geometry>
+          <material>
+            <ambient>0.4 0.4 0.4 1</ambient>  <!-- Gris para roca -->
+            <diffuse>0.4 0.4 0.4 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="rock_02">
+      <static>true</static>
+      <pose>-7 1 0.025 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <sphere><radius>0.18</radius></sphere>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <sphere><radius>0.18</radius></sphere>
+          </geometry>
+          <material>
+            <ambient>0.35 0.35 0.35 1</ambient>
+            <diffuse>0.35 0.35 0.35 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="rock_03">
+      <static>true</static>
+      <pose>4 5 0.02 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <sphere><radius>0.12</radius></sphere>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <sphere><radius>0.12</radius></sphere>
+          </geometry>
+          <material>
+            <ambient>0.45 0.45 0.45 1</ambient>
+            <diffuse>0.45 0.45 0.45 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Rampa suave para crear desnivel -->
+    <model name="slope_01">
+      <static>true</static>
+      <pose>0 7 0.04 0 0.05 0</pose>  <!-- Inclinación de 0.05 radianes ≈ 3° -->
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>6 3 0.08</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>6 3 0.08</size></box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.42 0.32 1</ambient>
+            <diffuse>0.5 0.42 0.32 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Área con textura rugosa simulada -->
+    <model name="rough_patch_01">
+      <static>true</static>
+      <pose>-4 -7 0.01 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>4 4 0.02</size></box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode><mu>1.2</mu><mu2>1.2</mu2></ode>  <!-- Mayor fricción para simular rugosidad -->
+            </friction>
+          </surface>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>4 4 0.02</size></box>
+          </geometry>
+          <material>
+            <ambient>0.4 0.3 0.2 1</ambient>  <!-- Más oscuro para diferenciarlo -->
+            <diffuse>0.4 0.3 0.2 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ─────────── PAREDES 30x30 (MISMAS DE ANTES) ─────────── -->
+    <model name="wall_left">
+      <static>true</static>
+      <pose>-15 0 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>0.2 30 2</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.2 30 2</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_right">
+      <static>true</static>
+      <pose>15 0 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>0.2 30 2</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>0.2 30 2</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_bottom">
+      <static>true</static>
+      <pose>0 -15 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>30 0.2 2</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>30 0.2 2</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_top">
+      <static>true</static>
+      <pose>0 15 1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box><size>30 0.2 2</size></box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box><size>30 0.2 2</size></box>
+          </geometry>
+          <material>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.3 0.3 0.3 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+    <!-- 📦 CAJAS DINÁMICAS (MISMAS DE ANTES)                                            -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════════ -->
+
+    <model name="box_00">
+      <pose>0 0 0.5 0 0 0</pose>
+      <static>false</static>
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.2 1</ambient>
+            <diffuse>0.8 0.2 0.2 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="box_01">
+      <pose>6 6 0.5 0 0 0</pose>
+      <static>false</static>
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.8 0.2 1</ambient>
+            <diffuse>0.2 0.8 0.2 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="box_02">
+      <pose>-6 6 0.5 0 0 0</pose>
+      <static>false</static>
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.2 0.8 1</ambient>
+            <diffuse>0.2 0.2 0.8 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="box_03">
+      <pose>-6 -6 0.5 0 0 0</pose>
+      <static>false</static>
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.2 1</ambient>
+            <diffuse>0.8 0.8 0.2 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="box_04">
+      <pose>6 -6 0.5 0 0 0</pose>
+      <static>false</static>
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.2 0.8 1</ambient>
+            <diffuse>0.8 0.2 0.8 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="box_05">
+      <pose>0 -8 0.5 0 0 0</pose>
+      <static>false</static>
+      <link name="link">
+        <inertial>
+          <mass>1.0</mass>
+          <inertia>
+            <ixx>0.167</ixx><iyy>0.167</iyy><izz>0.167</izz>
+            <ixy>0</ixy><ixz>0</ixz><iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <visual name="visual">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+          <material>
+            <ambient>0.2 0.8 0.8 1</ambient>
+            <diffuse>0.2 0.8 0.8 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box><size>1 1 1</size></box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- ─────────── FÍSICA ─────────── -->
+    <physics name="default_physics" type="ode">
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.004</max_step_size>
+      <use_real_time>false</use_real_time>
+      <ode>
+        <solver><type>quick</type><iters>40</iters><sor>1.3</sor></solver>
+        <constraints><cfm>1e-5</cfm><erp>0.3</erp></constraints>
+      </ode>
+    </physics>
+
+    <!-- ─────────── GUI ─────────── -->
+    <gui fullscreen="0">
+      <camera name="user_camera">
+        <pose>0 -25 20 0 0.6 1.57</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+
+  </world>
+</sdf>

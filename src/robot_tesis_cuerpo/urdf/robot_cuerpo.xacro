@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<robot name="robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- ========== ARGUMENTO DE PREFIJO ========== -->
+
+
+  <!-- ========== VARIABLES GENERALES ========== -->
+  <xacro:property name="package_name"        value="robot_tesis_cuerpo"/>
+  <xacro:property name="PI"                  value="3.14159265"/>
+
+  <!-- chasis -->
+  <xacro:property name="largoBase"           value="1.0"/>
+  <xacro:property name="anchoBase"           value="0.70"/>
+  <xacro:property name="altoBase"            value="0.27"/>
+  <xacro:property name="masaBase"            value="10"/>
+
+  <!-- ruedas -->
+  <xacro:property name="radioRueda"          value="0.25"/>
+  <xacro:property name="anchoRueda"          value="0.20"/>
+
+  <!-- ejes -->
+  <xacro:property name="distEjeX"            value="0.33"/>
+  <xacro:property name="distEjeY"            value="0.50"/>
+
+  <!-- LiDAR -->
+  <xacro:property name="radioLidar"          value="0.03"/>
+  <xacro:property name="altoLidar"           value="0.03"/>
+
+  <!-- frame base_footprint al suelo -->
+  <xacro:property name="distSuelo"           value="0.26"/>
+
+  <!-- incluir parte de Gazebo -->
+  <xacro:include filename="$(find ${package_name})/urdf/robot_gz.xacro"/>
+
+  <!-- ========== BASE FOOTPRINT & BASE LINK ========== -->
+  <link name="base_footprint"/>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.13" rpy="0 0 0"/>
+      <geometry><box size="${largoBase} ${anchoBase} ${altoBase}"/></geometry>
+      <material name="Blue"><color rgba="0 0 1 1"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.13"/>
+      <geometry><box size="${largoBase} ${anchoBase} ${altoBase}"/></geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0.13"/>
+      <mass value="${masaBase}"/>
+      <inertia ixx="${masaBase*(anchoBase*anchoBase + altoBase*altoBase)/12}"
+               iyy="${masaBase*(largoBase*largoBase + altoBase*altoBase)/12}"
+               izz="${masaBase*(largoBase*largoBase + anchoBase*anchoBase)/12}"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child  link="base_link"/>
+    <origin xyz="0 0 ${distSuelo}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ========== MACRO PARA RUEDAS ========== -->
+  <xacro:macro name="rueda" params="x y suffix">
+    <link name="${suffix}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+        <geometry><cylinder radius="${radioRueda}" length="${anchoRueda}"/></geometry>
+        <material name="Black"><color rgba="0 0 0 1"/></material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${PI/2} 0 0"/>
+        <geometry><cylinder radius="${radioRueda}" length="${anchoRueda}"/></geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0"/>
+        <mass value="2.7"/>
+        <inertia ixx="${2.7*(3*radioRueda*radioRueda + anchoRueda*anchoRueda)/12}"
+                 iyy="${0.5*2.7*radioRueda*radioRueda}"
+                 izz="${2.7*(3*radioRueda*radioRueda + anchoRueda*anchoRueda)/12}"
+                 ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+    </link>
+
+    <joint name="${suffix}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child  link="${suffix}_link"/>
+      <origin xyz="${x} ${y} 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- cuatro ruedas -->
+  <xacro:rueda x="${ distEjeX}" y="${ -distEjeY}" suffix="rueda_derecha_delantera"/>
+  <xacro:rueda x="${-distEjeX}" y="${ -distEjeY}" suffix="rueda_derecha_trasera"/>
+  <xacro:rueda x="${ distEjeX}" y="${distEjeY}" suffix="rueda_izquierda_delantera"/>
+  <xacro:rueda x="${-distEjeX}" y="${distEjeY}" suffix="rueda_izquierda_trasera"/>
+
+  <!-- ========== LIDAR ========== -->
+  <link name="lidar_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="${radioLidar}" length="${altoLidar}"/></geometry>
+      <material name="Grey"><color rgba="0.6 0.6 0.6 1"/></material>
+    </visual>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="lidar_link"/>
+    <origin xyz="0.35 0 0.28" rpy="0 0 0"/>
+  </joint>
+
+</robot>
+
