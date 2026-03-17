@@ -1,6 +1,38 @@
+# ROS2
 build/
 install/
 log/
 .colcon/
+
+# Python
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+venv/
+.env/
+
+# Archivos temporales
 *.swp
+*.swo
+*~
+
+# VSCode
+.vscode/
+
+# Jupyter / RL
+*.ipynb_checkpoints
+
+# Modelos entrenados (opcional)
+models/
+*.zip
+
+# Archivos grandes (opcional)
+*.bag
+*.db3
+
+# Sistema
+.DS_Store
+Thumbs.db
